@@ -1,7 +1,7 @@
 import BodyPart from "./components/BodyPart";
 import HeaderPart from "./components/HeaderPart";
 
-const App = () => {
+const HomePage = () => {
   return (
     <>
       {/*header part} */}
@@ -13,4 +13,4 @@ const App = () => {
   );
 };
 
-export default App;
+export default HomePage;
