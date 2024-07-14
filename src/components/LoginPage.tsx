@@ -1,13 +1,13 @@
 import { Button, Form, Input } from "antd";
 import { FaUser } from "react-icons/fa";
 import { RiLockPasswordFill } from "react-icons/ri";
-
 import axios from "axios";
-import  {useState} from "react";
+import  {useState, useEffect} from "react";
 
 
 const LoginPage = () => {
   const [error, setError] = useState(''); 
+  const [isLoggedIn, setisLoggedIn] = useState(false);
   interface LoginFormValues {
     email: string;
     password: string;
@@ -15,16 +15,18 @@ const LoginPage = () => {
   
   const handleLogin = async( values:LoginFormValues ) => {
     const { email, password } = values;
-    axios.post('http://127.0.0.1:8000/api/login', {
+    axios.post(`${import.meta.env.VITE_API_URL}api/login`, {
       email: email,
       password: password
     }).then((response) => {
-
+ 
       console.log(response)
       console.log(response.data);
       if(response.data.status === true) {
+        setError('');
         alert('success');
-        localStorage.setItem('token', response.data.access_token);
+        localStorage.setItem('access_token', response.data.access_token);
+        setisLoggedIn(true);
         // window.location.href = '/dashboard';
       } 
     }).catch((error) => { 
@@ -32,16 +34,20 @@ const LoginPage = () => {
       console.log(error);
     }
     )
-
   };
+  useEffect(() => {
+    if(isLoggedIn) {
+      window.location.href = '/dashboard';
+    }
+  }, [isLoggedIn]);
   return (
     <>
       <div className="flex justify-center items-center  bg-gradient-to-r from-indigo-400 to-pink-500  w-[100vw] h-[100vh]">
-        <div className="md:w-[25%] w-[50%] md:p-2 p-4 md:gap-4 gap-3  h-auto  shadow-gray-300 shadow-md rounded-2xl bg-[whitesmoke] font-[Montserrat] flex flex-col items-center">
+        <div className="md:w-[40%] w-[50%] md:p-5 p-4 md:gap-4 gap-3  h-auto  shadow-gray-300 shadow-md bg-[whitesmoke] font-[Montserrat] flex flex-col items-center">
           <p className="md:text-2xl text-xl font-bold text-gray-700 md:tracking-wide ">
             Login
           </p>
-          <div className=" md:w-[95%] ">
+          <div className=" md:w-[70%] ">
             <Form
               name="basic"
               labelCol={{ span: 8 }}
@@ -98,12 +104,7 @@ const LoginPage = () => {
             </Form>
             <div className="flex flex-col md:gap-4 items-center">
               <p className="md:text-sm font-extrabold ">OR</p>
-              <p
-                className="font-medium cursor-pointer md:hover:scale-125  hover:scale-110  hover:text-red-500"
-                onClick={() => {
-                  navigate("/register");
-                }}
-              >
+              <p className="font-medium cursor-pointer md:hover:scale-125  hover:scale-110  hover:text-red-500">
                 Sign Up !
               </p>
             </div>
