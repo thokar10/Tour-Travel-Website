@@ -6,6 +6,8 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import HomePage from "./HomePage";
 import LoginPage from "./components/LoginPage";
 import RegisterPage from "./components/RegisterPage";
+document.title = import.meta.env.VITE_APP_TITLE || 'Default Title';
+
 
 const routes = createBrowserRouter([
   {
