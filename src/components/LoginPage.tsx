@@ -1,12 +1,38 @@
 import { Button, Form, Input } from "antd";
 import { FaUser } from "react-icons/fa";
 import { RiLockPasswordFill } from "react-icons/ri";
-import { useNavigate } from "react-router-dom";
+
+import axios from "axios";
+import  {useState} from "react";
+
 
 const LoginPage = () => {
-  const navigate = useNavigate();
-  const onFinish = () => {
-    alert("Success:");
+  const [error, setError] = useState(''); 
+  interface LoginFormValues {
+    email: string;
+    password: string;
+  }
+  
+  const handleLogin = async( values:LoginFormValues ) => {
+    const { email, password } = values;
+    axios.post('http://127.0.0.1:8000/api/login', {
+      email: email,
+      password: password
+    }).then((response) => {
+
+      console.log(response)
+      console.log(response.data);
+      if(response.data.status === true) {
+        alert('success');
+        localStorage.setItem('token', response.data.access_token);
+        // window.location.href = '/dashboard';
+      } 
+    }).catch((error) => { 
+      setError(error?.response?.data?.message);
+      console.log(error);
+    }
+    )
+
   };
   return (
     <>
@@ -22,22 +48,21 @@ const LoginPage = () => {
               wrapperCol={{ span: 16 }}
               style={{ width: "100%" }}
               initialValues={{ remember: true }}
-              onFinish={onFinish}
-              autoComplete="off"
+              onFinish={handleLogin}
             >
               <Form.Item
-                label="Username"
-                name="username"
+                label="Email"
+                name="email"
                 rules={[
-                  { required: true, message: "Please input your username!" },
+                  { required: true, message: "Please input your Email!" },
                 ]}
               >
                 <Input
-                  placeholder="enter username"
+                  placeholder="enter Email"
                   prefix={<FaUser className="text-gray-400 mr-2 text-[13px]" />}
                 />
+                
               </Form.Item>
-
               <Form.Item
                 label="Password"
                 name="password"
@@ -52,6 +77,11 @@ const LoginPage = () => {
                   }
                 />
               </Form.Item>
+              {error && (
+              <div className="flex justify-center">
+              <p className="text-red-500">{error}</p>
+              </div>
+              )}             
               <p className="flex pb-3  justify-end  text-gray-600">
                 forget password ?
               </p>
