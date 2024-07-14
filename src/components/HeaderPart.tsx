@@ -1,15 +1,19 @@
 import type { MenuProps } from "antd";
 import { Button, Dropdown, Input, Modal } from "antd";
+import TextArea from "antd/es/input/TextArea";
 import { useState } from "react";
 import { FaFacebook, FaInstagram } from "react-icons/fa6";
 import { IoMenu } from "react-icons/io5";
+import { useNavigate } from "react-router-dom";
 import backgroundImage from "../pictures/background.jpg";
-import TextArea from "antd/es/input/TextArea";
 
 const HeaderPart = () => {
+  const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showBelowLine1, setBelowLine1] = useState(false);
   const [showBelowLine2, setBelowLine2] = useState(false);
+  const [showBelowLine3, setBelowLine3] = useState(false);
+  const [showBelowLine4, setBelowLine4] = useState(false);
 
   const showModal = () => {
     setIsModalOpen(true);
@@ -44,7 +48,7 @@ const HeaderPart = () => {
         style={{ backgroundImage: `url(${backgroundImage})` }}
       >
         <div className="flex  justify-center  pt-3 ">
-          <div className="md:w-[75%]  w-[90%] items-center  flex justify-between">
+          <div className="md:w-[75%] font-[Montserrat]  w-[90%] items-center  flex justify-between">
             <p
               style={{ fontFamily: "cursive" }}
               className="md:text-5xl text-2xl font-bold "
@@ -75,6 +79,7 @@ const HeaderPart = () => {
                   </>
                 )}
               </div>
+
               <div
                 className="cursor-pointer"
                 onMouseOver={() => {
@@ -86,6 +91,44 @@ const HeaderPart = () => {
               >
                 <p>Contact us</p>
                 {showBelowLine2 && (
+                  <>
+                    <div className="border-2 border-red-500   "></div>
+                  </>
+                )}
+              </div>
+              <div
+                className="cursor-pointer"
+                onClick={() => {
+                  navigate("/login");
+                }}
+                onMouseOver={() => {
+                  setBelowLine3(true);
+                }}
+                onMouseLeave={() => {
+                  setBelowLine3(false);
+                }}
+              >
+                <p>Login</p>
+                {showBelowLine3 && (
+                  <>
+                    <div className="border-2 border-red-500   "></div>
+                  </>
+                )}
+              </div>
+              <div
+                className="cursor-pointer"
+                onClick={() => {
+                  navigate("/register");
+                }}
+                onMouseOver={() => {
+                  setBelowLine4(true);
+                }}
+                onMouseLeave={() => {
+                  setBelowLine4(false);
+                }}
+              >
+                <p>Register</p>
+                {showBelowLine4 && (
                   <>
                     <div className="border-2 border-red-500   "></div>
                   </>
