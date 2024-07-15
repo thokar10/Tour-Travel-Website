@@ -43,7 +43,7 @@ const LoginPage = () => {
   return (
     <>
       <div className="flex justify-center items-center  bg-gradient-to-r from-indigo-400 to-pink-500  w-[100vw] h-[100vh]">
-        <div className="md:w-[40%] w-[50%] md:p-5 p-4 md:gap-4 gap-3  h-auto  shadow-gray-300 shadow-md bg-[whitesmoke] font-[Montserrat] flex flex-col items-center">
+        <div className="md:w-[40%] w-[50%] md:p-5 p-4 md:gap-4 gap-3  h-auto  shadow-gray-300 shadow-md rounded-2xl bg-[whitesmoke] font-[Montserrat] flex flex-col items-center">
           <p className="md:text-2xl text-xl font-bold text-gray-700 md:tracking-wide ">
             Login
           </p>
