@@ -3,6 +3,7 @@ import { FaUser } from "react-icons/fa";
 import { RiLockPasswordFill } from "react-icons/ri";
 import axios from "axios";
 import  {useState, useEffect} from "react";
+import { toast } from "react-toastify";
 
 
 const LoginPage = () => {
@@ -24,10 +25,10 @@ const LoginPage = () => {
       console.log(response.data);
       if(response.data.status === true) {
         setError('');
-        alert('success');
+        toast.success(response.data.message);
         localStorage.setItem('access_token', response.data.access_token);
         setisLoggedIn(true);
-        // window.location.href = '/dashboard';
+       
       } 
     }).catch((error) => { 
       setError(error?.response?.data?.message);
@@ -37,7 +38,7 @@ const LoginPage = () => {
   };
   useEffect(() => {
     if(isLoggedIn) {
-      window.location.href = '/dashboard';
+      // window.location.href = '/dashboard';
     }
   }, [isLoggedIn]);
   return (
