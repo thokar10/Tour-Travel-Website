@@ -1,7 +1,7 @@
-import type { MenuProps } from "antd";
-import { Button, Dropdown, Input, Modal } from "antd";
+// import type { MenuProps } from "antd";
+import { Button, Dropdown, Input, Modal, Popover } from "antd";
 import TextArea from "antd/es/input/TextArea";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FaFacebook, FaInstagram } from "react-icons/fa6";
 import { IoMenu } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
@@ -9,6 +9,7 @@ import backgroundImage from "../pictures/background.jpg";
 
 const HeaderPart = () => {
   const navigate = useNavigate();
+  const [showLoginIcon, setShowLoginIcon] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showBelowLine1, setBelowLine1] = useState(false);
   const [showBelowLine2, setBelowLine2] = useState(false);
@@ -26,7 +27,8 @@ const HeaderPart = () => {
   const handleCancel = () => {
     setIsModalOpen(false);
   };
-  const items: MenuProps["items"] = [
+
+  const items = [
     {
       key: "1",
       label: (
@@ -41,6 +43,27 @@ const HeaderPart = () => {
     },
   ];
 
+  // It shows details about user login (contents shown while hover login icon)
+  const content = (
+    <div className="flex flex-col items-center w-[10rem]   md:gap-3 gap-1">
+      <p>user profile</p>
+      <Button
+        type="primary"
+        onClick={() => {
+          localStorage.removeItem("access_token");
+          window.location.reload();
+        }}
+      >
+        Sign out
+      </Button>
+    </div>
+  );
+
+  useEffect(() => {
+    if (localStorage.getItem("access_token")) {
+      setShowLoginIcon(true);
+    }
+  }, []);
   return (
     <>
       <div
@@ -55,7 +78,7 @@ const HeaderPart = () => {
             >
               Tour Travel
             </p>
-
+            {/* to show header part if you are login */}
             <div className="menuOptions">
               {" "}
               <Dropdown menu={{ items }} placement="bottomLeft">
@@ -96,50 +119,68 @@ const HeaderPart = () => {
                   </>
                 )}
               </div>
-              <div
-                className="cursor-pointer"
-                onClick={() => {
-                  navigate("/login");
-                }}
-                onMouseOver={() => {
-                  setBelowLine3(true);
-                }}
-                onMouseLeave={() => {
-                  setBelowLine3(false);
-                }}
-              >
-                <p>Login</p>
-                {showBelowLine3 && (
-                  <>
-                    <div className="border-2 border-red-500   "></div>
-                  </>
-                )}
-              </div>
-              <div
-                className="cursor-pointer"
-                onClick={() => {
-                  navigate("/register");
-                }}
-                onMouseOver={() => {
-                  setBelowLine4(true);
-                }}
-                onMouseLeave={() => {
-                  setBelowLine4(false);
-                }}
-              >
-                <p>Register</p>
-                {showBelowLine4 && (
-                  <>
-                    <div className="border-2 border-red-500   "></div>
-                  </>
-                )}
-              </div>
-            </div>
 
-            <div className="anchorLinks flex md:gap-[15px] items-center font-semibold ">
-              <p>Follow us</p>
-              <FaInstagram className="cursor-pointer " />
-              <FaFacebook className="cursor-pointer" />
+              {showLoginIcon ? (
+                <>
+                  <div className="anchorLinks flex md:gap-[15px] items-center font-semibold ">
+                    <p>Follow us</p>
+                    <FaInstagram className="cursor-pointer " />
+                    <FaFacebook className="cursor-pointer" />
+                  </div>
+
+                  <Popover content={content}>
+                    <div className="w-[35px] h-[35px] hover:cursor-pointer hover:border-red-400 rounded-[50%] border-2 flex justify-center items-center border-gray-300">
+                      <p>S</p>
+                    </div>
+                  </Popover>
+                </>
+              ) : (
+                <>
+                  <div
+                    className="cursor-pointer"
+                    onClick={() => {
+                      navigate("/login");
+                    }}
+                    onMouseOver={() => {
+                      setBelowLine3(true);
+                    }}
+                    onMouseLeave={() => {
+                      setBelowLine3(false);
+                    }}
+                  >
+                    <p>Login</p>
+                    {showBelowLine3 && (
+                      <>
+                        <div className="border-2 border-red-500   "></div>
+                      </>
+                    )}
+                  </div>
+                  <div
+                    className="cursor-pointer"
+                    onClick={() => {
+                      navigate("/register");
+                    }}
+                    onMouseOver={() => {
+                      setBelowLine4(true);
+                    }}
+                    onMouseLeave={() => {
+                      setBelowLine4(false);
+                    }}
+                  >
+                    <p>Register</p>
+                    {showBelowLine4 && (
+                      <>
+                        <div className="border-2 border-red-500   "></div>
+                      </>
+                    )}
+                  </div>
+                  <div className="anchorLinks flex md:gap-[15px] items-center font-semibold ">
+                    <p>Follow us</p>
+                    <FaInstagram className="cursor-pointer " />
+                    <FaFacebook className="cursor-pointer" />
+                  </div>
+                </>
+              )}
             </div>
           </div>
         </div>
