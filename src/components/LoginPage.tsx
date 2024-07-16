@@ -1,42 +1,46 @@
-import { Button, Form, Input, message } from "antd";
-import axios from "axios";
-import { useState } from "react";
+import { Button, Form, Input } from "antd";
 import { FaUser } from "react-icons/fa";
 import { RiLockPasswordFill } from "react-icons/ri";
+import axios from "axios";
+import  {useState, useEffect} from "react";
+import { toast } from "react-toastify";
+
 
 const LoginPage = () => {
-  const [error, setError] = useState("");
+  const [error, setError] = useState(''); 
+  const [isLoggedIn, setisLoggedIn] = useState(false);
   interface LoginFormValues {
     email: string;
     password: string;
   }
-
-  const handleLogin = async (values: LoginFormValues) => {
+  
+  const handleLogin = async( values:LoginFormValues ) => {
     const { email, password } = values;
-
-    console.log(email, password);
-    axios
-      .post(`${import.meta.env.VITE_API_URL}api/login`, {
-        email: email,
-        password: password,
-      })
-      .then((response) => {
-        console.log(response.data);
-        if (!response.data.access_token) {
-          setError("");
-        }
-
-        message.success("Login successful");
-        localStorage.setItem("access_token", response.data.access_token);
-
-        window.location.href = "/";
-      })
-      .catch((error) => {
-        setError(error?.response?.data?.message);
-        console.log(error);
-      });
+    axios.post(`${import.meta.env.VITE_API_URL}api/login`, {
+      email: email,
+      password: password
+    }).then((response) => {
+ 
+      console.log(response)
+      console.log(response.data);
+      if(response.data.status === true) {
+        setError('');
+        toast.success(response.data.message);
+        localStorage.setItem('access_token', response.data.access_token);
+        setisLoggedIn(true);
+       
+      } 
+    }).catch((error) => { 
+      setError(error?.response?.data?.message);
+      console.log(error);
+    }
+    )
   };
-
+  useEffect(() => {
+    if(isLoggedIn) {
+      // window.location.href = '/dashboard';
+    }
+  }, [isLoggedIn]);
   return (
     <>
       <div className="flex justify-center items-center  bg-gradient-to-r from-indigo-400 to-pink-500  w-[100vw] h-[100vh]">
@@ -64,6 +68,7 @@ const LoginPage = () => {
                   placeholder="enter Email"
                   prefix={<FaUser className="text-gray-400 mr-2 text-[13px]" />}
                 />
+                
               </Form.Item>
               <Form.Item
                 label="Password"
@@ -80,10 +85,10 @@ const LoginPage = () => {
                 />
               </Form.Item>
               {error && (
-                <div className="flex justify-center">
-                  <p className="text-red-500">{error}</p>
-                </div>
-              )}
+              <div className="flex justify-center">
+              <p className="text-red-500">{error}</p>
+              </div>
+              )}             
               <p className="flex pb-3  justify-end  text-gray-600">
                 forget password ?
               </p>

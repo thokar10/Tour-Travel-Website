@@ -6,6 +6,9 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import HomePage from "./HomePage";
 import LoginPage from "./components/LoginPage";
 import RegisterPage from "./components/RegisterPage";
+import { ToastContainer } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
+
 document.title = import.meta.env.VITE_APP_TITLE || 'Default Title';
 
 
@@ -25,6 +28,7 @@ const routes = createBrowserRouter([
 ]);
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
+    <ToastContainer />
     <RouterProvider router={routes} />
   </React.StrictMode>
 );
