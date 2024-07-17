@@ -4,8 +4,10 @@ import TextArea from "antd/es/input/TextArea";
 import { useEffect, useState } from "react";
 import { FaFacebook, FaInstagram } from "react-icons/fa6";
 import { IoMenu } from "react-icons/io5";
-import { useNavigate } from "react-router-dom";
+import { redirect, useNavigate } from "react-router-dom";
 import backgroundImage from "../pictures/background.jpg";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 const HeaderPart = () => {
   const navigate = useNavigate();
@@ -43,16 +45,42 @@ const HeaderPart = () => {
     },
   ];
 
+  const handleLogout = async () => {
+    try {
+      const token = localStorage.getItem('access_token');
+      if (!token) {
+        // Handle case where token is missing or expired
+        return;
+      }
+  
+      const response = await axios.post(
+        `${import.meta.env.VITE_API_URL}api/logout`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+  
+      if (response.data.status === true) {
+        localStorage.removeItem('access_token');
+        setShowLoginIcon(false);
+        toast.success(response.data.message);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+ 
+
   // It shows details about user login (contents shown while hover login icon)
   const content = (
     <div className="flex flex-col items-center w-[10rem]   md:gap-3 gap-1">
       <p>user profile</p>
       <Button
         type="primary"
-        onClick={() => {
-          localStorage.removeItem("access_token");
-          window.location.reload();
-        }}
+        onClick={handleLogout}
       >
         Sign out
       </Button>

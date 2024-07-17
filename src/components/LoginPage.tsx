@@ -5,7 +5,6 @@ import axios from "axios";
 import  {useState, useEffect} from "react";
 import { toast } from "react-toastify";
 
-
 const LoginPage = () => {
   const [error, setError] = useState(''); 
   const [isLoggedIn, setisLoggedIn] = useState(false);
@@ -25,9 +24,9 @@ const LoginPage = () => {
       console.log(response.data);
       if(response.data.status === true) {
         setError('');
-        toast.success(response.data.message);
         localStorage.setItem('access_token', response.data.access_token);
         setisLoggedIn(true);
+        toast.success(response.data.message);
        
       } 
     }).catch((error) => { 
@@ -37,8 +36,10 @@ const LoginPage = () => {
     )
   };
   useEffect(() => {
-    if(isLoggedIn) {
-      // window.location.href = '/dashboard';
+    if(isLoggedIn) {  
+      setTimeout(() => {
+      window.location.href = '/';
+    }, 1500);
     }
   }, [isLoggedIn]);
   return (

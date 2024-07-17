@@ -1,6 +1,7 @@
 import { Button, Form, Input, InputNumber } from "antd";
 import axios from "axios";
 import { useState } from "react";
+import { toast } from "react-toastify";
 
 const RegisterPage = () => {
   const [error, setError] = useState(''); 
@@ -28,8 +29,10 @@ const RegisterPage = () => {
       console.log(response.data);
       if(response.data.status === true) {
         setError('');
-        alert('success');
+        toast.success(response.data.message);
+        setTimeout(() => {
         window.location.href = '/login';
+        }, 1500);
       } 
     }).catch((error) => { 
       setError(error?.response?.data?.message);
